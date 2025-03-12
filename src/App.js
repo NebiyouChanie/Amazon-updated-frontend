@@ -1,24 +1,24 @@
-import logo from './logo.svg';
-import './App.css';
-
+import "./App.css";
+import { auth } from "./utility/firebase";
+import Layout from "./components/LayOut/Layout";
+import Routing from "./Router";
+import { Type } from "./utility/action.type";
+import { DataContext } from "./components/DataProvider/DataProvider";
+import { useContext, useEffect } from "react";
 function App() {
+  const [{ user }, dispatch] = useContext(DataContext);
+  useEffect(() => {
+    auth.onAuthStateChanged((authUser) => {
+      dispatch({
+        type: Type.SET_USER,
+        user: authUser,
+      });
+    });
+  }, []);
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
+    <>
+      <Routing />
+    </>
   );
 }
 
